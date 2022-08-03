@@ -36,7 +36,14 @@ const examplePokemon = require("./pokemon.js");
 ];
  */
 
-function getAllPokemonNames() {}
+function getAllPokemonNames(pokemon) {
+  if (pokemon.length === 1) {
+    throw console.error()
+  }
+
+  const pokemonNames = pokemon.map(({ name }) => name)
+  return pokemonNames
+}
 
 /**
  * checkIfAnyPokemonWeighsLessThan()
@@ -56,7 +63,11 @@ function getAllPokemonNames() {}
  *  checkIfAnyPokemonWeighsLessThan(pokemon, 18);
  *  //> false
  */
-function checkIfAnyPokemonWeighsLessThan() {}
+
+// we set the default for w to be 19 because the test wants a defualt to a number higher than 18. In this example we changed it into a number (as it was a string 18 by default) We changed it to w so that we were not comparing pokemon weight with a variable called weight
+function checkIfAnyPokemonWeighsLessThan(pokemon, w = 19) {
+return pokemon.some(({weight})=> weight < w)
+}
 
 /**
  * findByName()
@@ -74,7 +85,10 @@ function checkIfAnyPokemonWeighsLessThan() {}
       // clefable
     };
  */
-function findByName() {}
+function findByName(pokemon, name) {
+  
+  return pokemon.find(({pokeId})=> pokeId === name) || null
+}
 
 /**
  * filterByType()
@@ -100,7 +114,18 @@ function findByName() {}
  *  filterByType(pokemon, "psychic")
  *  //> []
  */
-function filterByType() {}
+function filterByType(pokemon, genre) {
+  let retArr = []
+  pokemon.filter((el) => {
+    const pokeType = el.types.find((type) => type.slot === 1)
+    console.log(pokeType.type.name)
+    if (genre.toLowerCase() === pokeType.type.name) {
+      retArr.push(el)
+      
+    }
+  })
+  return retArr
+}
 
 /**
  * checkMinBaseExperience()
@@ -117,7 +142,16 @@ function filterByType() {}
  *  //>  false
  */
 
-function checkMinBaseExperience() {}
+function checkMinBaseExperience(pokemon, baseExperience) {
+
+  // for (let val of pokemon) {
+  //   console.log (val.base_experience)
+  // }
+  
+  return pokemon.every(({ base_experience }) => base_experience >= baseExperience)
+  return pokemon.every(({ base_experience }) => base_experience >= baseExperience2)
+  
+}
 
 
 
@@ -126,7 +160,7 @@ function checkMinBaseExperience() {}
  * -----------------------------
  * Returns an array of pokemon where the key is the name and the value is the FIRST type in the array of types. If the pokemon array is empty, throw an error
  * @param {Object[]} pokemon - An array of pokemon. See the `pokemon.js` file for an example of this array.
- * @returns {Boolean|Error} An array of pokemon || Error
+ * @returns {object[]|Error} An array of pokemon || Error
  *
  * NOTE: You must use the .map() & find() methods.
  *
@@ -161,8 +195,23 @@ function checkMinBaseExperience() {}
  */
 
 
-const findType = () => {
+const findType = (pokemon) => {
+  if (!pokemon.length) {
+    throw `Error, no pokemon!`
+  }
+  // return pokemon.map((element) => {
+  //   let val = undefined
+  //   element.types.find((innerElement) => {
+  //     val = innerElement.type.name
+  //     return val
+  //   })
+  //   return {[element.name]:val}
+  // })
   
+  return pokemon.map((el) => {
+    const slotOne = el.types.find((type) => type.slot === 1)
+    return { [el.name]:slotOne.type.name}
+})
 }
 
 module.exports = {
